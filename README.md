@@ -1,106 +1,100 @@
 # Display Switcher
 
-Decky-Plugin zum direkten Wechsel zwischen verbundenen Monitoren in der
-SteamOS-Gaming-Sitzung. Keine Samsung-/TV-Profile, keine vorher eingerichteten
-Umschaltskripte, keine Änderungen an `/usr` und kein Root-Plugin.
+A Decky plugin for switching between connected monitors in SteamOS Gaming Mode.
 
-Quellcode: [GitHub](https://github.com/tomsch/decky-display-switcher) ·
-[Forgejo](https://git.sch.at/tom/decky-display-switcher).
-Installierbare ZIPs: [Releases](https://github.com/tomsch/decky-display-switcher/releases).
+## Requirements
 
-## Voraussetzungen
+- Decky Loader with plugin API 1 and the modern `@decky/api` / `@decky/ui` APIs.
+- A Gamescope session managed by `gamescope-session.service` and
+  `gamescope-session.target` in the systemd user manager.
+- A stock session service under `/usr/lib` or `/lib`, with one absolute script
+  path in `ExecStart`. The shell script must launch Gamescope exactly once using
+  an unqualified `exec gamescope` and must not override `PATH`.
+- `gamescope`, `gamescopectl`, `systemctl`, and Python 3.10+ on `PATH`.
+  Gamescope must report active display information through its control protocol.
 
-- Decky Loader mit Plugin-API 1 und modernen `@decky/api`/`@decky/ui`-APIs.
-- Gamescope-Gaming-Sitzung mit `gamescope-session.service` und
-  `gamescope-session.target` im systemd-Benutzermanager.
-- Stock-Sitzungsdienst unter `/usr/lib` oder `/lib` mit einem einzelnen absoluten
-  `ExecStart`-Skriptpfad. Das Shell-Skript muss Gamescope genau einmal über
-  unqualifiziertes `exec gamescope` starten und darf `PATH` nicht überschreiben.
-- `gamescope`, `gamescopectl`, `systemctl` und Python 3.10+ im Suchpfad.
-  Gamescope muss aktive Displayinformationen über das Control-Protokoll melden.
+The plugin supports arbitrary monitors, but not arbitrary session managers.
+Unsupported stock scripts and existing `ExecStart` overrides are left unchanged;
+monitor discovery remains available with a diagnostic message. The plugin does
+not manage resolution or refresh rate.
 
-Das Plugin ist monitorunabhängig, aber kein Adapter für beliebige Linux-
-Sitzungsmanager. Unbekannte Stock-Formate und fremde `ExecStart`-Overrides werden
-nicht überschrieben. Die Displayliste bleibt mit einer Diagnose verfügbar.
-Es ist kein Auflösungs- oder Bildwiederholratenmanager.
+## Usage
 
-## Bedienung
+Open Decky → **Display Switcher**, then select **Hierher wechseln** (switch here)
+for the desired monitor.
 
-Decky → **Display Switcher** → beim gewünschten Monitor **Hierher wechseln**.
-**Der Wechsel startet sofort, ohne Bestätigungsdialog. Er beendet Steam und laufende
-Spiele und startet die Gaming-Sitzung neu.** Ungespeicherter Spielfortschritt kann
-verloren gehen. Während des Neustarts kann das Bild schwarz sein.
+**Switching starts immediately, without a confirmation dialog. It closes Steam
+and running games, then restarts the Gaming Mode session.** Unsaved game progress
+may be lost. The screen may go black during the restart.
 
-Der tatsächlich von Gamescope verwendete Ausgang wird über den lesenden Aufruf
-`gamescopectl` erkannt. Sein Button zeigt **Aktiv** und ist deaktiviert. DRM-
-Encoderstatus und gespeicherte Präferenz werden nicht als Aktivitätsnachweis
-verwendet. Ohne eindeutige aktive Gamescope-Auskunft wird kein blinder Neustart
-zugelassen.
+The current output is detected through a read-only `gamescopectl` invocation.
+Its button shows **Aktiv** (active) and is disabled. DRM encoder state and the
+saved preference are not treated as proof of the active output. Switching is
+blocked when Gamescope's current output cannot be identified unambiguously.
 
-Die kompakte Ansicht zeigt nur verbundene Monitore, jeweils mit **Max. Auflösung**.
-**Details anzeigen** klappt Anschlüsse, DRM-Status, Monitoridentität, Startpräferenz
-und Session-Anbindung auf. Der Neustarthinweis steht im Bereich **Monitore** und
-nennt ausdrücklich **Hierher wechseln**. **Aktualisieren** liest den Zustand nach
-Hotplug oder Kabelwechsel erneut ein; dieser Button startet die Sitzung nicht neu.
+The compact view lists connected monitors and their **Max. Auflösung** (maximum
+resolution). **Details anzeigen** (show details) expands connector information,
+DRM state, monitor identity, startup preference, and session integration. The
+restart warning appears in the **Monitore** (monitors) section and names the
+switch button explicitly. **Aktualisieren** (refresh) reads the current state
+after a hotplug or cable change without restarting the session.
 
-„Max. Auflösung“ ist die vom Anschluss gemeldete Auflösung mit der höchsten
-Pixelzahl, nicht die aktuelle oder native Panelauflösung. Hz werden aus den
-Sysfs-Modinamen nicht abgeleitet. DRM-Writeback-Ziele sind keine Monitoroptionen.
+Maximum resolution is the advertised connector mode with the largest pixel
+count, not the current or native panel resolution. Refresh rates are not inferred
+from sysfs mode names. DRM writeback targets are not offered as monitors.
 
-## Startpräferenz und Rückfall
+## Startup preference and fallback
 
-Ein Wechsel speichert die bevorzugte Monitoridentität atomar als versioniertes
-JSON im Decky-Einstellungsverzeichnis. Eine brauchbare EDID-Seriennummer verbindet
-die Präferenz mit dem Monitor statt mit seinem Port. Ohne Seriennummer wird der
-vollständige gültige EDID-Hash verwendet; ohne gültige EDID bleibt die Präferenz
-anschlussgebunden. Identische EDIDs lassen sich ohne weitere Geräteinformationen
-nicht eindeutig unterscheiden; dann hilft der gespeicherte Anschluss.
-HDMI-Extension-Count-Overrides werden berücksichtigt; die vollständige deklarierte
-EDID-Länge und die Prüfsummen aller Blöcke bleiben Pflicht.
+Switching saves the preferred monitor identity atomically as versioned JSON in
+Decky's settings directory. A usable EDID serial number associates the preference
+with the monitor rather than its port. Without a serial number, the complete
+valid EDID hash is used; without valid EDID, the preference is connector-bound.
+Identical EDIDs cannot be distinguished without additional device information;
+the saved connector breaks that tie. HDMI extension-count overrides are supported,
+while the full declared EDID length and checksums of every block remain required.
 
-Bei jedem Sitzungsstart prüft der Gamescope-Shim die aktuell verbundenen Monitore.
-Fehlt der bevorzugte Monitor, verwendet er den einzigen DRM-aktivierten verbundenen
-Ausgang, andernfalls den ersten verbundenen Ausgang in stabiler Anschlussreihenfolge.
-Die gespeicherte Präferenz wird dabei **nicht** überschrieben: Sobald der bevorzugte
-Monitor wieder vorhanden ist, wird er beim nächsten Sitzungsstart erneut bevorzugt.
-Ohne verbundenen Ausgang bleibt Gamescopes Stock-Wildcard-Priorität erhalten.
-Das ist ein Start-Rückfall, kein eigener Hotplug-Neustartdienst.
+At each session start, the Gamescope shim checks connected monitors. If the
+preferred monitor is missing, it uses the sole DRM-enabled connected output,
+or otherwise the first connected output in stable connector order. This does
+**not** overwrite the saved preference: when the preferred monitor returns,
+it is selected at the next session start. With no connected output, Gamescope's
+stock wildcard priority is preserved. This is a startup fallback, not a service
+that restarts the session on hotplug.
 
-## Installation und Deinstallation
+## Installation and removal
 
-Das ZIP über Deckys Funktion **Installieren von URL** oder den ZIP-Dateiauswahldialog
-installieren. Für eine URL muss das Paket vom SteamOS-PC aus erreichbar sein.
-Decky übernimmt Installation, Besitzrechte und Laden des Plugins.
+Install the ZIP through Decky's **Install from URL** option or ZIP file picker.
+For URL installation, the package must be reachable from the SteamOS machine.
+Decky handles installation, ownership, and plugin loading.
 
-Beim Laden richtet das Plugin diesen benutzereigenen Drop-in ein:
+When loaded, the plugin creates this user-service drop-in:
 
 ```text
 ~/.config/systemd/user/gamescope-session.service.d/90-display-switcher.conf
 ```
 
-Er startet den unveränderten Stock-Sitzungsablauf über `session.py`. Ein temporärer
-PATH-Shim setzt nur Gamescopes Ausgangspriorität und entfernt sich vor dem Start
-des echten Gamescope wieder aus dem Suchpfad. Argumente des gestarteten Spiels
-bleiben unverändert. Einrichtung und `daemon-reload` starten die laufende Sitzung
-**nicht** neu; die Anbindung gilt für kommende Starts beziehungsweise einen
-bewusst ausgelösten Ausgangswechsel.
-Systemprogramme verwenden den ursprünglichen Bibliothekssuchpfad statt Deckys
-gebündelter Laufzeitbibliotheken. Die Umgebung von Decky selbst bleibt unverändert.
+It runs the unchanged stock session script through `session.py`. A temporary
+PATH shim sets Gamescope's output priority and removes itself from `PATH` before
+launching the real Gamescope. Game arguments are preserved. Setup and
+`daemon-reload` do **not** restart the running session; integration applies to
+future starts and explicitly requested output switches. System commands use the
+original library search path rather than Decky's bundled runtime libraries;
+Decky's own environment is unchanged.
 
-Das Plugin läuft als Deckys normaler Benutzer und verwendet dessen systemd-Bus.
-Es enthält keine Passwörter oder SSH-Zugänge. Deinstallation entfernt ausschließlich
-den unverändert pluginverwalteten Drop-in und lädt systemd neu, ohne die laufende
-Sitzung neu zu starten. Fremde oder nachträglich veränderte Konfiguration bleibt
-unberührt. Ein normaler Plugin-Reload behält die Session-Anbindung.
+The plugin runs as Decky's normal user and uses that user's systemd bus. It
+contains no passwords or SSH credentials. Removal deletes only the unchanged,
+plugin-managed drop-in and reloads systemd without restarting the session.
+External or subsequently modified configuration is preserved. A normal plugin
+reload retains session integration.
 
-## Entwicklung
+## Development
 
-Node.js, Python 3.10+ und pnpm 9 verwenden. React und die Decky-Oberfläche stellt
-Steam/Decky zur Laufzeit bereit; sie werden nicht ins Plugin gebündelt.
+Use Node.js, Python 3.10+, and pnpm 9. Steam and Decky supply React and the Decky UI
+at runtime; these libraries are not bundled into the plugin.
 
-Die Tests prüfen Monitorauswahl, Präferenzen und Session-Verwaltung. Auf SteamOS
-sind Ausgangserkennung und Oberfläche geprüft. Live-Wechsel und Start-Rückfall
-mit echtem Session-Neustart wurden noch nicht auf Hardware getestet.
+Tests cover monitor selection, preferences, and session management. Output
+detection and the interface have been checked on SteamOS. Live switching and
+startup fallback with a real session restart have not yet been hardware-tested.
 
 ```sh
 corepack pnpm install --frozen-lockfile --ignore-scripts
@@ -108,7 +102,7 @@ corepack pnpm test
 corepack pnpm package
 ```
 
-Alternativ ohne Corepack:
+Without Corepack:
 
 ```sh
 npm exec --yes --package=pnpm@9.15.9 -- pnpm install --frozen-lockfile --ignore-scripts
@@ -116,44 +110,42 @@ npm exec --yes --package=pnpm@9.15.9 -- pnpm test
 npm exec --yes --package=pnpm@9.15.9 -- pnpm package
 ```
 
-`pnpm package` erzeugt zwei Dateien:
+`pnpm package` produces two files:
 
-- `release/display-switcher-2.0.3.zip`: installierbares Decky-Plugin mit
-  Lizenztexten, Fremdkomponenten-Hinweisen und einem eingebetteten `sources.zip`.
-- `release/display-switcher-2.0.3-source.zip`: vollständige Plugin-Quellen,
-  Build-Konfiguration, Lockfile und der passende Decky-API-Quellstand.
+- `release/display-switcher-2.0.3.zip`: the installable Decky plugin, including
+  license texts, third-party notices, and an embedded `sources.zip`.
+- `release/display-switcher-2.0.3-source.zip`: the complete plugin sources,
+  build configuration, lockfile, and matching Decky API sources.
 
-Das eingebettete `sources.zip` ist dieselbe Quell-ZIP-Datei. Zum Neubauen diese
-entpacken und im Verzeichnis `display-switcher-2.0.3-source` die obigen
-Installations- und Build-Befehle ausführen. Der Build benötigt keinen Steam-Client.
+The embedded `sources.zip` is identical to the separate source archive. To
+rebuild, extract it and run the installation and build commands above from
+`display-switcher-2.0.3-source`. Building does not require a Steam client.
 
-`@decky/api` wird direkt aus `third_party/decky-api/src/index.ts` kompiliert,
-nicht aus einem vorgebauten npm-Paket. Um eine geänderte Bibliothek zu verwenden,
-die Dateien in `third_party/decky-api/src/` bearbeiten und erneut `pnpm package`
-ausführen. Rollup und TypeScript verwenden beide diesen Quellpfad. Die
-Provenanzdatei `third_party/decky-api-source.json` beschreibt den ursprünglichen
-Upstreamstand. Änderungen an der Bibliothek mit Datum kennzeichnen und die
-Fremdkomponenten-Hinweise entsprechend aktualisieren; ihre LGPL-Lizenz bleibt
-erhalten.
+`@decky/api` is compiled directly from `third_party/decky-api/src/index.ts`,
+not from a prebuilt npm package. To use a modified library, edit the files under
+`third_party/decky-api/src/` and run `pnpm package` again. Rollup and TypeScript
+both resolve the API to that source path. The provenance file
+`third_party/decky-api-source.json` records the original upstream source.
+Mark library changes with their dates and update the third-party notices
+accordingly; the library remains under its LGPL license.
 
-## Lizenz
+## License
 
-Der eigene Code steht unter [MIT](LICENSE). Enthaltene Fremdkomponenten behalten
-ihre jeweiligen Lizenzen. Die [Fremdkomponenten-Hinweise](docs/third-party-notices.md)
-dokumentieren Decky API, React Icons, Font Awesome und die Template-Anteile.
-Lizenztexte liegen in `licenses/` und werden mit jedem Release ausgeliefert.
-Die passenden LGPL-Quellen und Unterlagen zum Neubauen liegen im Quellarchiv und
-sind auch im Plugin-ZIP enthalten.
+The plugin's own code is licensed under [MIT](LICENSE). Third-party components
+retain their respective licenses. The [third-party notices](docs/third-party-notices.md)
+cover Decky API, React Icons, Font Awesome, and template material. License texts
+in `licenses/` are included with every release. Matching LGPL sources and rebuild
+instructions are supplied in the source archive, also embedded in the plugin ZIP.
 
-## Fehlerdiagnose
+## Troubleshooting
 
-Veraltete Auswahl, abgezogene Monitore, unlesbare Präferenzen, nicht unterstützte
-Session-Formate und systemd-Fehler werden angezeigt. Nach Hotplug aktualisieren.
-Ein erfolgreicher Neustart verlangt eine neue Session-Invocation, geladene eigene
-Konfiguration, aktiven Dienst und Target sowie den von Gamescope bestätigten
-angeforderten Ausgang; ein Exitcode allein genügt nicht. Ist der Neustart bereits
-angefordert, kann eine spätere Fehleranzeige nicht garantieren, dass die Sitzung
-unverändert geblieben ist.
+Stale selections, disconnected monitors, unreadable preferences, unsupported
+session formats, and systemd failures are reported in the interface. Refresh
+after hotplug. A successful restart requires a new session invocation, the
+plugin-managed configuration to be loaded, an active service and target, and
+Gamescope confirming the requested output; an exit code alone is insufficient.
+Once a restart has been requested, a later error cannot guarantee that the
+session remained unchanged.
 
 ```sh
 systemctl --user show gamescope-session.service -p ExecStart -p ActiveState
@@ -163,5 +155,5 @@ journalctl --user -u gamescope-session.service
 journalctl -u plugin_loader.service
 ```
 
-Dokumentation: [offizielle Quellen](docs/references.md), [Änderungen](CHANGELOG.md),
-[Fremdkomponenten und Lizenzen](docs/third-party-notices.md).
+Documentation: [official references](docs/references.md), [changelog](CHANGELOG.md),
+[third-party components and licenses](docs/third-party-notices.md).
