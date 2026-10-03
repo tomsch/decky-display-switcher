@@ -83,8 +83,8 @@ future starts and explicitly requested output switches. System commands use the
 original library search path rather than Decky's bundled runtime libraries;
 Decky's own environment is unchanged.
 
-The plugin runs as Decky's normal user and uses that user's systemd bus. It
-contains no passwords or SSH credentials. Removal deletes only the unchanged,
+The plugin runs as Decky's normal user and uses that user's systemd bus.
+Removal deletes only the unchanged,
 plugin-managed drop-in and reloads systemd without restarting the session.
 External or subsequently modified configuration is preserved. A normal plugin
 reload retains session integration.
