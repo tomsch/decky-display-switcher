@@ -4,6 +4,7 @@
 
 - Include third-party licenses and Font Awesome attribution in releases.
 - Ship matching Decky API and plugin sources for rebuilding with a modified library.
+- Add an English README with a SteamOS screenshot.
 
 ## 2.0.2 — 2026-10-03
 

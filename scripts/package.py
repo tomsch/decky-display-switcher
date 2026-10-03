@@ -9,7 +9,7 @@ metadata = json.loads((root / "package.json").read_text())
 runtime_files = [
     "package.json", "plugin.json", "main.py", "display_core.py", "session.py",
     "bin/gamescope", "README.md", "LICENSE", "CHANGELOG.md", "docs/references.md",
-    "docs/third-party-notices.md", "dist/index.js",
+    "docs/third-party-notices.md", "docs/images/display-switcher.png", "dist/index.js",
 ]
 source_files = [
     "package.json", "plugin.json", "main.py", "display_core.py", "session.py",

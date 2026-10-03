@@ -2,6 +2,8 @@
 
 A Decky plugin for switching between connected monitors in SteamOS Gaming Mode.
 
+<img src="docs/images/display-switcher.png" alt="Display Switcher in SteamOS Gaming Mode" width="360">
+
 ## Requirements
 
 - Decky Loader with plugin API 1 and the modern `@decky/api` / `@decky/ui` APIs.
