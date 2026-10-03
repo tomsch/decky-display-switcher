@@ -1,0 +1,33 @@
+{
+  "name": "display-switcher",
+  "version": "2.0.3",
+  "description": "Switch connected SteamOS Gamescope displays from Decky.",
+  "type": "module",
+  "author": "Tom",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "build": "tsc --noEmit && rollup -c",
+    "watch": "rollup -c -w",
+    "test": "python3 -m unittest discover -s tests -v",
+    "package": "pnpm run build && python3 scripts/package.py"
+  },
+  "devDependencies": {
+    "@decky/rollup": "1.0.2",
+    "@decky/ui": "4.12.1",
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.1",
+    "@types/react-router": "5.1.20",
+    "rollup": "4.53.3",
+    "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "react-icons": "5.3.0",
+    "tslib": "2.7.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": ["react", "react-dom"]
+    }
+  }
+}

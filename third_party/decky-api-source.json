@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "@decky/api",
+    "version": "1.1.3",
+    "license": "LGPL-2.1",
+    "sourceDirectory": "third_party/decky-api"
+  },
+  "upstream": {
+    "repository": "https://github.com/SteamDeckHomebrew/loader-api",
+    "commit": "d1b7f16070777a0ada939cbacd3606eeba0574f5",
+    "commitUrl": "https://github.com/SteamDeckHomebrew/loader-api/commit/d1b7f16070777a0ada939cbacd3606eeba0574f5",
+    "treeSha1": "e2a03da4aa4797abe6e99a0c365e2266d82d18ca",
+    "archiveUrl": "https://codeload.github.com/SteamDeckHomebrew/loader-api/tar.gz/d1b7f16070777a0ada939cbacd3606eeba0574f5",
+    "archiveSha256": "24f639b73f259c28dee116681011f3e47ff425af799cfa91dfe6f75e56b89a8e",
+    "commitApiUrl": "https://api.github.com/repos/SteamDeckHomebrew/loader-api/git/commits/d1b7f16070777a0ada939cbacd3606eeba0574f5",
+    "treeApiUrl": "https://api.github.com/repos/SteamDeckHomebrew/loader-api/git/trees/e2a03da4aa4797abe6e99a0c365e2266d82d18ca?recursive=1",
+    "completeTrackedTree": true,
+    "fileCount": 23,
+    "modified": false,
+    "excluded": [
+      ".git metadata (not present in GitHub source archive)"
+    ],
+    "generatedOutput": "No dist/ or node_modules/ files exist in the pinned upstream tree; none were added."
+  },
+  "npm": {
+    "registryUrl": "https://registry.npmjs.org/@decky%2fapi/1.1.3",
+    "gitHead": "d1b7f16070777a0ada939cbacd3606eeba0574f5",
+    "tarballUrl": "https://registry.npmjs.org/@decky/api/-/api-1.1.3.tgz",
+    "tarballSha256": "273227cd80104fd5a9307328b798c299abaa174111e36808128e616fdabeb807",
+    "tarballSha1": "ec58c21f914a421f37465157f520504a5fc04024",
+    "integrity": "sha512-XsPCZxfxk5I1UtylIUN3qaWQI31siQbKfbLIskkI5innEatY1m4NQqBv/6hwPaO9mKMbdqYpnh5PSJDeMEOOBA==",
+    "sha1Verified": true,
+    "integrityVerified": true
+  },
+  "verification": {
+    "allTrackedFilesMatchGitBlobHashes": true,
+    "allPublishedSourceFilesMatch": true,
+    "allInstalledSourceFilesMatch": true,
+    "installedSourceDirectory": "node_modules/@decky/api/src",
+    "publishedSourceFiles": [
+      {
+        "path": "src/index.ts",
+        "sha256": "3193df7a9d563e1a7d65c3acd162e3b7357e47eb36862f2c1f3fc57134ed156d",
+        "upstream_matches_npm_tarball": true,
+        "upstream_matches_installed_package": true
+      },
+      {
+        "path": "src/types.d.ts",
+        "sha256": "77c2831b47a9b2ba944e4b97466f18dd92c03a9c0c1ead4818129a5153629103",
+        "upstream_matches_npm_tarball": true,
+        "upstream_matches_installed_package": true
+      },
+      {
+        "path": "src/types.ts",
+        "sha256": "93e5ecece4cde0d92bc2d2e77efcc5d4d9b1091211586aec83ce44d484daa51f",
+        "upstream_matches_npm_tarball": true,
+        "upstream_matches_installed_package": true
+      }
+    ],
+    "additionalMatchingPublishedFiles": [
+      "LICENSE",
+      "README.md",
+      "package.json"
+    ],
+    "generatedPublishedFiles": [
+      "dist/index.d.ts",
+      "dist/index.js",
+      "dist/types.d.ts",
+      "dist/types.js"
+    ],
+    "discrepancies": []
+  },
+  "files": {
+    ".commitlintrc.json": {
+      "sha256": "274caad59d0f625a71b71d104572d3dbc42a1e7e99d2af22f138fa1519c9a3aa",
+      "gitBlobSha1": "c30e5a970ba051b106b77267503f6c3eca8e12d0",
+      "gitMode": "100644"
+    },
+    ".github/workflows/docs.yaml": {
+      "sha256": "2c10984358d3c3b94e7889e24d207d30e46e9b21dfe8fb545edeb972bb93b15d",
+      "gitBlobSha1": "80c50b5c37d346682ef02ab9ade9e5c0de1900c2",
+      "gitMode": "100644"
+    },
+    ".github/workflows/release.yaml": {
+      "sha256": "116f19ba313adf9c8c7726c3dfa856ac72f1ba6534a0a834908e98cfbf89f929",
+      "gitBlobSha1": "eb17ed490d5046f22c1c3103d7d1c6674343729f",
+      "gitMode": "100644"
+    },
+    ".gitignore": {
+      "sha256": "3024c52a66c448ac0effdaf69373e60d39b9bf8a9220a8b617c937b5a341ded4",
+      "gitBlobSha1": "f971bfd55854bcf5dc3eb13ac7460c5c6360fe0a",
+      "gitMode": "100644"
+    },
+    ".husky/commit-msg": {
+      "sha256": "970defdc760153af98267fd8e2bb3d820f9d82a56150bb52c18ee6f879d2a156",
+      "gitBlobSha1": "e998e3115944f5ab05822ebcb41300e633656a78",
+      "gitMode": "100755"
+    },
+    ".npmignore": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "gitMode": "100644"
+    },
+    ".prettierignore": {
+      "sha256": "d8484f5c19a001b050f74cb08afbd3cf4d8d36f293952b168988e3013ec8719e",
+      "gitBlobSha1": "2203e5411be24807b274b492dbddb0fffb93b41d",
+      "gitMode": "100644"
+    },
+    ".prettierrc.js": {
+      "sha256": "eab9970677c75ec6686299e35b19503cb240cae6f5e2fb32f59b7e29094c2b8d",
+      "gitBlobSha1": "01727ff9cff054e5288a144d861889a464429d25",
+      "gitMode": "100644"
+    },
+    ".releaserc.json": {
+      "sha256": "2465d9e60ff7c0786a281eb8fb839a9b8b0c69acac85e1733ecc6925f9986631",
+      "gitBlobSha1": "deec87be1d9ac58f7ff652ca52436c90a9309a51",
+      "gitMode": "100644"
+    },
+    ".vscode/tasks.json": {
+      "sha256": "3ef7de27be257ade6c8f058713ee306ca2ad1b1cdf0c96dd7ec803772d92a88a",
+      "gitBlobSha1": "044e16d72463059fc1c138f4a8d766038e620014",
+      "gitMode": "100644"
+    },
+    "CHANGELOG.md": {
+      "sha256": "f4de5789303b7de135af51f6ea6707d5bc96b2285e6adfe6bb6b7716d91611a4",
+      "gitBlobSha1": "887717f091d70408890f5321cd682b93fc3ff1d0",
+      "gitMode": "100644"
+    },
+    "LICENSE": {
+      "sha256": "38965778962143b687faff3a5b69ef22dd228e0ca4f5a3752893e016ede87c6a",
+      "gitBlobSha1": "8d8c7cf276947728ef522ffb70b82eb0367c52fb",
+      "gitMode": "100644"
+    },
+    "README.md": {
+      "sha256": "3ae1b95aea978b2440dc115848b579d6a607bc40cff16eabfa32e4130f1edce3",
+      "gitBlobSha1": "ae8b66aae54425fee6c3a5f9079bfe83e4a3d26e",
+      "gitMode": "100644"
+    },
+    "babel.config.js": {
+      "sha256": "8225ea804d4094311c3d41584e51117fc9b4cab16fea3f7ee377f5292eb3b290",
+      "gitBlobSha1": "e6ffbd417e7bd1ef092d8bd8cde6c40c4103b021",
+      "gitMode": "100644"
+    },
+    "global.d.ts": {
+      "sha256": "51b36bdb378a0fe30e5f7561444163af9b21081e0b0816890f3ace7561927cca",
+      "gitBlobSha1": "ce33a8f41ec9ca39aade046527ba2cb71a3f7b09",
+      "gitMode": "100644"
+    },
+    "jest.config.js": {
+      "sha256": "fc5f0e13091ba825dc5aed637cdf92043760340578f2fa114104e4c5f9122277",
+      "gitBlobSha1": "e86e13bab91631cd021dffeafd3ffb85d42b3ace",
+      "gitMode": "100644"
+    },
+    "package.json": {
+      "sha256": "8be297dad38eefd6e80b3a6b3f5083e875a7dd1261f866c91efbf4e380867aa1",
+      "gitBlobSha1": "dc9830e6391aec64eb195d44b2a3ab0e09a3dabf",
+      "gitMode": "100644"
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "83e30dfae605c0a3a4f110a04f5ba9fe6be74d7a4a58152bd8d6149705929a61",
+      "gitBlobSha1": "4becf2638b2f87e6f42bf03b33564d30464bf762",
+      "gitMode": "100644"
+    },
+    "src/index.ts": {
+      "sha256": "3193df7a9d563e1a7d65c3acd162e3b7357e47eb36862f2c1f3fc57134ed156d",
+      "gitBlobSha1": "1b3ca46585ff3e3851a5cfa51fe9f9b8c2506abc",
+      "gitMode": "100644"
+    },
+    "src/types.d.ts": {
+      "sha256": "77c2831b47a9b2ba944e4b97466f18dd92c03a9c0c1ead4818129a5153629103",
+      "gitBlobSha1": "590ac2e2bd0f8ffb43c9e1384fe22505e3325729",
+      "gitMode": "100644"
+    },
+    "src/types.ts": {
+      "sha256": "93e5ecece4cde0d92bc2d2e77efcc5d4d9b1091211586aec83ce44d484daa51f",
+      "gitBlobSha1": "d37fd915cb3bf9e255379c5d74d553efa65a4633",
+      "gitMode": "100644"
+    },
+    "tsconfig.json": {
+      "sha256": "01128fc4acd6da3def744ee32ea4bbbc430994a719dbdfc967d12cf9ff2c9758",
+      "gitBlobSha1": "d3289525a6390d168948f9a19421cc3f18169f72",
+      "gitMode": "100644"
+    },
+    "typedoc.json": {
+      "sha256": "7de730a0e3d4c231992061fc30e09092b725028321bd4595cc21d11fffb95a29",
+      "gitBlobSha1": "0ed44dbfc264f8fc74b07d6d84fab906ad32e316",
+      "gitMode": "100644"
+    }
+  }
+}

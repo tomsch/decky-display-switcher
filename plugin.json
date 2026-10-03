@@ -1,0 +1,10 @@
+{
+  "name": "Display Switcher",
+  "author": "Tom",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": ["display", "gamescope", "steamos"],
+    "description": "Discover connected displays, show the active Gamescope output and switch directly from the Quick Access Menu."
+  }
+}
