@@ -1,6 +1,6 @@
 {
   "name": "display-switcher",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Switch connected SteamOS Gamescope displays from Decky.",
   "type": "module",
   "author": "Tom",

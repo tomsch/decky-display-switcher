@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.4 — 2026-10-04
+
+- Use English labels and status text in the monitor interface.
+- Replace the README image with a live English SteamOS screenshot.
+
 ## 2.0.3 — 2026-10-04
 
 - Include third-party licenses and Font Awesome attribution in releases.

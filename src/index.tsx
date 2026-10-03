@@ -32,20 +32,20 @@ function maximumResolution(modes: readonly string[]): string {
       pixels = nextPixels;
     }
   }
-  return pixels ? `${width} × ${height}` : "nicht gemeldet";
+  return pixels ? `${width} × ${height}` : "not reported";
 }
 
 function DisplayDetails({ display }: { display: Display }) {
   return (
     <div style={{ fontSize: 12, lineHeight: 1.45, overflowWrap: "anywhere" }}>
-      <div>Anschluss: {display.connector}</div>
+      <div>Connector: {display.connector}</div>
       <div>
-        {display.connected ? "Verbunden" : "Nicht verbunden"}
-        {" · "}DRM: {display.enabled ? "aktiviert" : "deaktiviert"}
+        {display.connected ? "Connected" : "Disconnected"}
+        {" · "}DRM: {display.enabled ? "enabled" : "disabled"}
       </div>
-      <div>Erkennung: {display.identity_source === "edid" ? "EDID" : "Anschluss (keine gültige EDID)"}</div>
-      <div>Identität: {display.identity}</div>
-      {display.preferred && <div>Bevorzugt beim nächsten Start</div>}
+      <div>Detection: {display.identity_source === "edid" ? "EDID" : "Connector (no valid EDID)"}</div>
+      <div>Identity: {display.identity}</div>
+      {display.preferred && <div>Preferred at next startup</div>}
     </div>
   );
 }
@@ -93,7 +93,7 @@ function Content() {
       await readSnapshot(epoch);
     } catch (error: unknown) {
       if (isCurrent(epoch)) {
-        setRequestError(`Anzeigen konnten nicht geladen werden: ${errorText(error)}`);
+        setRequestError(`Could not load displays: ${errorText(error)}`);
       }
     } finally {
       if (isCurrent(epoch)) setLoading(false);
@@ -132,9 +132,9 @@ function Content() {
     try {
       const result = await switchDisplay(display.id);
       succeeded = result.ok;
-      if (!result.ok) failure = result.error ?? "Der Ausgangswechsel ist fehlgeschlagen.";
+      if (!result.ok) failure = result.error ?? "Output switching failed.";
     } catch (error: unknown) {
-      failure = `Ausgangswechsel konnte nicht bestätigt werden: ${errorText(error)}`;
+      failure = `Could not confirm the output switch: ${errorText(error)}`;
     }
 
     // A session restart can unmount this view before the RPC returns.
@@ -142,7 +142,7 @@ function Content() {
       try {
         await readSnapshot(epoch);
       } catch (error: unknown) {
-        const refreshFailure = `Status konnte nicht neu geladen werden: ${errorText(error)}`;
+        const refreshFailure = `Could not refresh the status: ${errorText(error)}`;
         failure = failure ? `${failure} ${refreshFailure}` : refreshFailure;
       }
     }
@@ -150,7 +150,7 @@ function Content() {
     if (isCurrent(epoch)) {
       setSwitching(false);
       setRequestError(failure);
-      if (succeeded) setNotice("Ausgangswechsel bestätigt.");
+      if (succeeded) setNotice("Output switch confirmed.");
     }
   };
 
@@ -160,14 +160,14 @@ function Content() {
 
   return (
     <>
-      <PanelSection title="Anzeigen">
+      <PanelSection title="Displays">
         <PanelSectionRow>
           <ButtonItem
             layout="below"
             disabled={localBusy}
             onClick={() => void refresh()}
           >
-            {loading ? "Wird geladen…" : "Aktualisieren"}
+            {loading ? "Loading…" : "Refresh"}
           </ButtonItem>
         </PanelSectionRow>
         {(requestError || snapshot?.error) && (
@@ -182,9 +182,9 @@ function Content() {
           <PanelSectionRow>
             <div role="status" style={{ fontSize: 12 }}>
               {switching
-                ? "Ausgangswechsel läuft. Steam und laufende Spiele werden beendet…"
+                ? "Switching outputs. Closing Steam and running games…"
                 : snapshot?.switching
-                  ? "Ausgangswechsel läuft. Danach den Status aktualisieren."
+                  ? "Switching outputs. Refresh the status afterwards."
                   : notice}
             </div>
           </PanelSectionRow>
@@ -193,11 +193,11 @@ function Content() {
 
       {snapshot && (
         <>
-          <PanelSection title="Monitore">
+          <PanelSection title="Monitors">
             <PanelSectionRow>
               <div style={{ fontSize: 12, lineHeight: 1.45 }}>
-                <strong>„Hierher wechseln“</strong> beendet Steam und laufende Spiele
-                und startet die Gaming-Sitzung sofort neu.
+                <strong>“Switch here”</strong> closes Steam and running games
+                and immediately restarts the Gaming Mode session.
               </div>
             </PanelSectionRow>
             {connected.length ? connected.map((display) => (
@@ -205,31 +205,31 @@ function Content() {
                 <ButtonItem
                   layout="below"
                   label={display.name}
-                  description={`Max. Auflösung: ${maximumResolution(display.modes)}`}
+                  description={`Max. resolution: ${maximumResolution(display.modes)}`}
                   disabled={switchBusy || !snapshot.integration_ready || display.active}
                   onClick={() => void startSwitch(display)}
                 >
-                  {display.active ? "Aktiv" : "Hierher wechseln"}
+                  {display.active ? "Active" : "Switch here"}
                 </ButtonItem>
               </PanelSectionRow>
             )) : (
-              <PanelSectionRow><div>Keine verbundenen Monitore erkannt.</div></PanelSectionRow>
+              <PanelSectionRow><div>No connected monitors detected.</div></PanelSectionRow>
             )}
             <PanelSectionRow>
               <ButtonItem layout="below" onClick={() => setDetailsVisible((visible) => !visible)}>
-                {detailsVisible ? "Details ausblenden" : "Details anzeigen"}
+                {detailsVisible ? "Hide details" : "Show details"}
               </ButtonItem>
             </PanelSectionRow>
           </PanelSection>
           {detailsVisible && (
-            <PanelSection title="Technische Details">
+            <PanelSection title="Technical details">
               <PanelSectionRow>
                 <div style={{ fontSize: 12, lineHeight: 1.45, overflowWrap: "anywhere" }}>
-                  <div>Gamescope-Ausgang: {snapshot.active_connector ?? "nicht ermittelbar"}</div>
-                  <div>Quelle: {snapshot.active_source ?? "keine verlässliche Ausgabeinformation"}</div>
-                  <div>Bevorzugt beim Start: {snapshot.preferred?.name ?? "automatisch"}</div>
-                  <div>Session-Anbindung: {snapshot.integration_ready ? "eingerichtet" : "nicht verfügbar"}</div>
-                  <div>Max. Auflösung ist gemeldet, nicht die aktuelle oder native Panelauflösung.</div>
+                  <div>Gamescope output: {snapshot.active_connector ?? "unknown"}</div>
+                  <div>Source: {snapshot.active_source ?? "no reliable output information"}</div>
+                  <div>Startup preference: {snapshot.preferred?.name ?? "automatic"}</div>
+                  <div>Session integration: {snapshot.integration_ready ? "ready" : "unavailable"}</div>
+                  <div>Max. resolution is advertised, not the current or native panel resolution.</div>
                 </div>
               </PanelSectionRow>
               {snapshot.displays.map((display) => (

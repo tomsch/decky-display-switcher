@@ -22,7 +22,7 @@ not manage resolution or refresh rate.
 
 ## Usage
 
-Open Decky → **Display Switcher**, then select **Hierher wechseln** (switch here)
+Open Decky → **Display Switcher**, then select **Switch here**
 for the desired monitor.
 
 **Switching starts immediately, without a confirmation dialog. It closes Steam
@@ -30,15 +30,15 @@ and running games, then restarts the Gaming Mode session.** Unsaved game progres
 may be lost. The screen may go black during the restart.
 
 The current output is detected through a read-only `gamescopectl` invocation.
-Its button shows **Aktiv** (active) and is disabled. DRM encoder state and the
+Its button shows **Active** and is disabled. DRM encoder state and the
 saved preference are not treated as proof of the active output. Switching is
 blocked when Gamescope's current output cannot be identified unambiguously.
 
-The compact view lists connected monitors and their **Max. Auflösung** (maximum
-resolution). **Details anzeigen** (show details) expands connector information,
+The compact view lists connected monitors and their **Max. resolution**.
+**Show details** expands connector information,
 DRM state, monitor identity, startup preference, and session integration. The
-restart warning appears in the **Monitore** (monitors) section and names the
-switch button explicitly. **Aktualisieren** (refresh) reads the current state
+restart warning appears in the **Monitors** section and names the
+switch button explicitly. **Refresh** reads the current state
 after a hotplug or cable change without restarting the session.
 
 Maximum resolution is the advertised connector mode with the largest pixel
@@ -114,14 +114,14 @@ npm exec --yes --package=pnpm@9.15.9 -- pnpm package
 
 `pnpm package` produces two files:
 
-- `release/display-switcher-2.0.3.zip`: the installable Decky plugin, including
+- `release/display-switcher-2.0.4.zip`: the installable Decky plugin, including
   license texts, third-party notices, and an embedded `sources.zip`.
-- `release/display-switcher-2.0.3-source.zip`: the complete plugin sources,
+- `release/display-switcher-2.0.4-source.zip`: the complete plugin sources,
   build configuration, lockfile, and matching Decky API sources.
 
 The embedded `sources.zip` is identical to the separate source archive. To
 rebuild, extract it and run the installation and build commands above from
-`display-switcher-2.0.3-source`. Building does not require a Steam client.
+`display-switcher-2.0.4-source`. Building does not require a Steam client.
 
 `@decky/api` is compiled directly from `third_party/decky-api/src/index.ts`,
 not from a prebuilt npm package. To use a modified library, edit the files under
